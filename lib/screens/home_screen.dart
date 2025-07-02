@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav.dart';
 import 'category_screen.dart';
+import 'order_screen.dart'; // <--- Tambahkan ini
 
 class HomeScreen extends StatelessWidget {
+  final Color primaryColor = Colors.orange;
+
   final List<Map<String, dynamic>> categories = [
     {'icon': Icons.build, 'label': 'Otomotif'},
     {'icon': Icons.local_shipping, 'label': 'Logistik'},
@@ -21,14 +24,14 @@ class HomeScreen extends StatelessWidget {
     {
       'icon': Icons.home_repair_service,
       'title': 'Tukang Harian',
-      'desc': 'Tukang bangunan ok',
-      'color': Colors.blue
+      'desc': 'Bangunan & Renovasi',
+      'color': Colors.deepOrange
     },
     {
       'icon': Icons.cleaning_services,
       'title': 'Cleaning Rumah',
-      'desc': 'Bersih, cepat, profesional',
-      'color': Colors.green
+      'desc': 'Bersih cepat & rapi',
+      'color': Colors.orangeAccent
     },
   ];
 
@@ -36,23 +39,23 @@ class HomeScreen extends StatelessWidget {
 
   Widget bannerItem(String text, Color color) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
         children: [
-          const Icon(Icons.star, color: Colors.white, size: 36),
-          const SizedBox(width: 12),
+          const Icon(Icons.local_offer_rounded, color: Colors.white, size: 36),
+          const SizedBox(width: 14),
           Expanded(
             child: Text(
               text,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -61,35 +64,38 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget popularServiceCard(Map<String, dynamic> service) {
-    return Container(
-      width: 180,
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: service['color'].withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: service['color'], width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(service['icon'], size: 32, color: service['color']),
-          const SizedBox(height: 8),
-          Text(
-            service['title'],
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: service['color'],
-              fontSize: 16,
+  Widget popularServiceCard(Map<String, dynamic> service, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 160,
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: service['color'].withOpacity(0.08),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: service['color'].withOpacity(0.5)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(service['icon'], size: 32, color: service['color']),
+            const SizedBox(height: 10),
+            Text(
+              service['title'],
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: service['color'],
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            service['desc'],
-            style: const TextStyle(fontSize: 13, color: Colors.black87),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              service['desc'],
+              style: const TextStyle(fontSize: 13, color: Colors.black54),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -101,22 +107,22 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Beresin',
           style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
+            color: primaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // 🔧 Search bar dan ikon profil dengan Modal BottomSheet
                 Row(
                   children: [
                     Expanded(
@@ -124,13 +130,13 @@ class HomeScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Cari layanan...',
                           prefixIcon: const Icon(Icons.search),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
                           fillColor: Colors.grey.shade200,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
                         ),
                       ),
                     ),
@@ -147,6 +153,11 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                const Text(
+                                  'Masuk sebagai pengguna',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                const Divider(height: 24),
                                 ListTile(
                                   leading: const Icon(Icons.login),
                                   title: const Text('Login'),
@@ -168,60 +179,49 @@ class HomeScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.blueAccent,
-                        child: Icon(Icons.person, color: Colors.white),
+                      child: CircleAvatar(
+                        backgroundColor: primaryColor,
+                        child: const Icon(Icons.person, color: Colors.white),
                       ),
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 20),
 
-                // Banner
                 SizedBox(
-                  height: 140,
+                  height: 130,
                   child: PageView(
                     controller: PageController(viewportFraction: 0.9),
                     children: [
-                      bannerItem('Promo Tukang pro bgt', Colors.orange),
-                      bannerItem('Jasa Cleaning Diskon 120%', Colors.green),
-                      bannerItem('Gratis Ongkir Logistik', Colors.purple),
+                      bannerItem('Promo Tukang Pro BGT!', primaryColor),
+                      bannerItem('Diskon Cleaning 120%', Colors.orangeAccent),
+                      bannerItem('Gratis Ongkir Logistik!', Colors.deepOrange),
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 24),
 
-                // Kategori
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
+                      BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
                     ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Kategori Jasa',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                      ),
+                      const Text('Kategori Jasa',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                       const SizedBox(height: 16),
                       Wrap(
                         spacing: 16,
                         runSpacing: 16,
-                        alignment: WrapAlignment.center,
                         children: categories.map((cat) {
                           return InkWell(
                             borderRadius: BorderRadius.circular(12),
@@ -229,7 +229,7 @@ class HomeScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CategoryScreen(
+                                  builder: (_) => CategoryScreen(
                                     categoryLabel: cat['label'],
                                     icon: cat['icon'],
                                   ),
@@ -237,23 +237,17 @@ class HomeScreen extends StatelessWidget {
                               );
                             },
                             child: Container(
-                              width: 100,
+                              width: 90,
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
+                                color: primaryColor.withAlpha(20),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(cat['icon'],
-                                      size: 32, color: Colors.blueAccent),
+                                  Icon(cat['icon'], size: 30, color: primaryColor),
                                   const SizedBox(height: 8),
-                                  Text(
-                                    cat['label'],
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
+                                  Text(cat['label'], textAlign: TextAlign.center),
                                 ],
                               ),
                             ),
@@ -263,65 +257,35 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 24),
 
-                // Layanan Populer
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Layanan Populer',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
+                    const Text('Layanan Populer',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 12),
                     SizedBox(
-                      height: 120,
+                      height: 140,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: popularServices.length,
                         itemBuilder: (context, index) {
-                          return popularServiceCard(popularServices[index]);
+                          final service = popularServices[index];
+                          return popularServiceCard(
+                            service,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => OrderScreen(workerName: service['title']),
+                                ),
+                              );
+                            },
+                          );
                         },
                       ),
-                    ),
-                  ],
-                ),
-
-                // Pesanan Terbaru
-                const SizedBox(height: 24),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Pesanan Terbaru',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.build_circle, color: Colors.orange),
-                          title: const Text('Tukang Harian'),
-                          subtitle: const Text('Status: Selesai • 3 hari lalu'),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.cleaning_services, color: Colors.green),
-                          title: const Text('Cleaning Rumah'),
-                          subtitle: const Text('Status: Diproses • Hari ini'),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () {},
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -331,7 +295,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const BottomNavBar(currentIndex: 0),
-
     );
   }
 }
