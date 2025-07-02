@@ -10,15 +10,17 @@ class BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
+        if (index == currentIndex) return; // Hindari reload jika sudah di halaman itu
+
         switch (index) {
           case 0:
             Navigator.pushReplacementNamed(context, '/home');
             break;
           case 1:
-            // Tambahkan rute pelatihan
+            Navigator.pushReplacementNamed(context, '/pesanan');
             break;
           case 2:
-            // Tambahkan rute Chat
+            Navigator.pushReplacementNamed(context, '/chat');
             break;
         }
       },
